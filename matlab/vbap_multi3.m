@@ -61,17 +61,17 @@ UheadErr3 = (psi13 - psi3);
 UdistErr3 = h13 - d0; 
 
 if h12<d1
-    psiJ1 = e12 * sign(UheadErr1); 
+    psiJ1 = e12 * sign(wrapToPi(UheadErr1)); 
 else 
     psiJ1 = 0;
 end
 if h23<d1
-    psiJ2 = e23 * sign(UheadErr2); 
+    psiJ2 = e23 * sign(wrapToPi(UheadErr2)); 
 else 
     psiJ2 = 0;
 end
 if h13<d1
-    psiJ3 = e13 * sign(UheadErr3); 
+    psiJ3 = e13 * sign(wrapToPi(UheadErr3)); 
 else 
     psiJ3 = 0;
 end
@@ -103,11 +103,11 @@ fprintf("USV2--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Er
 fprintf("USV3--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
     psiLead3,psi3,headErr3,r3_c,distErr3,v3_c);
 
-fprintf("USV1 to USV2 --> PsiJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
-    psiJ1,UheadErr1,UdistErr1);
-fprintf("USV2 to USV3 --> PsiJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
-    psiJ2,UheadErr2,UdistErr2);
-fprintf("USV3 to USV1 --> PsiJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
-    psiJ3,UheadErr3,UdistErr3);
+fprintf("USV1 to USV2 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
+    h12,UheadErr1,UdistErr1);
+fprintf("USV2 to USV3 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
+    h23,UheadErr2,UdistErr2);
+fprintf("USV3 to USV1 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f \n", ...
+    h13, UheadErr3,UdistErr3);
 
 return
