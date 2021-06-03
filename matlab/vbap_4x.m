@@ -49,7 +49,7 @@ while true
 %     OTHER_ODOM = USV2_ODOM;
     
     % Call a function to implement the VBAP algorithm.
-    [u_c1,u_c2,u_c3,u_c4,r_c1,r_c2,r_c3,r_c4] = vbap_multi3(USV_ODOM, USV2_ODOM, ...
+    [u_c1,u_c2,u_c3,u_c4,r_c1,r_c2,r_c3,r_c4] = vbap_multi4(USV_ODOM, USV2_ODOM, ...
         USV3_ODOM, USV4_ODOM, RABBIT_POSITION);
     
     % Publish the results
