@@ -103,7 +103,7 @@ if tdist1 < 50
     headerr2 = wrapToPi(psi2_t - psi2);
     headerr3 = wrapToPi(psi3_t - psi3);
     headerr4 = wrapToPi(psi4_t - psi4);
-    k_v = 0.15;
+    k_v = 0.2;
 end
 
 % Total Control Law
