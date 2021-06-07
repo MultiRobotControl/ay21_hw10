@@ -41,7 +41,7 @@ headerr1 = aerr1 + sum(psiJ);
 headerr2 = aerr2 - sum(psiJ);
 
 % Converge on Target if within 50m
-tgt_x = -765; tgt_y = 875;
+tgt_x = -765; tgt_y = 875; % target location
 tdist1 = sqrt((tgt_x - USV_ODOM.Pose.Pose.Position.X)^2 + ...
         (tgt_y - USV_ODOM.Pose.Pose.Position.Y)^2);
 tdist2 = sqrt((tgt_x - USV2_ODOM.Pose.Pose.Position.X)^2 + ...
@@ -51,11 +51,12 @@ psi1_t = atan2(tgt_y - USV_ODOM.Pose.Pose.Position.Y,tgt_x - ...
 psi2_t = atan2(tgt_y - USV2_ODOM.Pose.Pose.Position.Y,tgt_x - ...
     USV2_ODOM.Pose.Pose.Position.X);
 
-if tdist1 < 50
+if tdist1 < 50 % when first vehicle is within 50m of target
     dist1 = tdist1;
     dist2 = tdist2;
     headerr1 = wrapToPi(psi1_t - psi1);
     headerr2 = wrapToPi(psi2_t - psi2);
+    k_v = 0.2;
 end
 
 % Total Control Law
