@@ -1,6 +1,6 @@
 function [v1_c,r1_c,v2_c,r2_c] = vbap_multi2(USV1_ODOM,USV2_ODOM,RABBIT_POSITION)
 % Function prototype for implementing 
-kv = 0.1; kh = 3; k0 = 0.05;
+kv = 0.1; kh = 3; k0 = 0.15;
 d0 = 25; d1 = 2*d0; 
 
 % Distance errors with rabbit
@@ -46,9 +46,9 @@ end
 
 % Control commands
 v1_c = kv * distErr1;
-r1_c = kh * headErr1; 
+r1_c = kh * headErr1 + psiJ; 
 v2_c = kv * distErr2;
-r2_c = kh * headErr2 + psiJ;
+r2_c = kh * headErr2 - psiJ;
 
 % Saturation
 v1_c = min(abs(v1_c),7.5);

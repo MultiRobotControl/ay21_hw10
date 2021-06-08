@@ -2,7 +2,7 @@
 <launch>
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find vrx_gazebo)/config/custom_rosconsole.conf"/>
   <!-- Gazebo world to load -->
-  <arg name="world" default="$(find mrc_examples)/worlds/marina_project.world" />
+  <arg name="world" default="$(find mrc_examples)/worlds/marina.world" />
   <!-- If true, run gazebo GUI -->
   <arg name="gui" default="true" />
   <!-- If true, run gazebo in verbose mode -->
@@ -39,7 +39,7 @@
          
     <!-- Spawn USV model in Gazebo -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-x -250 -y -350 -z 0.1
+        args="-x 10 -y -372 -z 0.1
               -R 0 -P 0 -Y 0
               -urdf -param robot_description -model cora1"/>
               
@@ -83,7 +83,7 @@
          
     <!-- Spawn USV model in Gazebo -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-x -250 -y -370 -z 0.1
+        args="-x 10 -y -392 -z 0.1
               -R 0 -P 0 -Y 0
               -urdf -param robot_description -model cora2"/>
               
@@ -117,11 +117,7 @@
     </node>
   </group>
   
-  <!-- Spawn a visual model to serve as marker -->
-  <node name="spawn_target" pkg="gazebo_ros" type="spawn_model"
-        args="-x -765 -y 875 -z 0 -file $(find mrc_examples)/urdf/target.urdf
-              -urdf -model target"/>
-
+  
    <!-- Spawn a visual model to serve as marker -->
   <node name="spawn_rabbit" pkg="gazebo_ros" type="spawn_model"
         args="-x 20 -y -372 -z 0 -file $(find mrc_examples)/urdf/rabbit.urdf

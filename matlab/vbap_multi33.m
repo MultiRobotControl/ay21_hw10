@@ -1,37 +1,37 @@
-function [v1_c,r1_c,v2_c,r2_c,v3_c,r3_c] = vbap_multi3(USV1_ODOM,USV2_ODOM,USV3_ODOM,RABBIT_POSITION)
+function [v1_c,r1_c,v2_c,r2_c,v3_c,r3_c] = vbap_multi33(USV4_ODOM,USV5_ODOM,USV6_ODOM,RABBIT_POSITION)
 % Function prototype for implementing 
-kv = 0.1; kh = 3; k0 = 0.05;
+kv = 0.065; kh = 3; k0 = 0.05;
 D=50; d0 = 25; d1 = 2*d0; 
 
 % Distance with Target
-D1 = sqrt((USV1_ODOM.Pose.Pose.Position.X+765)^2 + (USV1_ODOM.Pose.Pose.Position.Y-875)^2);
-D2 = sqrt((USV2_ODOM.Pose.Pose.Position.X+765)^2 + (USV2_ODOM.Pose.Pose.Position.Y-875)^2);
-D3 = sqrt((USV3_ODOM.Pose.Pose.Position.X+765)^2 + (USV3_ODOM.Pose.Pose.Position.Y-875)^2);
+D1 = sqrt((USV4_ODOM.Pose.Pose.Position.X+765)^2 + (USV4_ODOM.Pose.Pose.Position.Y-875)^2);
+D2 = sqrt((USV5_ODOM.Pose.Pose.Position.X+765)^2 + (USV5_ODOM.Pose.Pose.Position.Y-875)^2);
+D3 = sqrt((USV6_ODOM.Pose.Pose.Position.X+765)^2 + (USV6_ODOM.Pose.Pose.Position.Y-875)^2);
 
 % Distance errors with rabbit
-Xerr1 = RABBIT_POSITION.Point.X - USV1_ODOM.Pose.Pose.Position.X;
-Yerr1 = RABBIT_POSITION.Point.Y - USV1_ODOM.Pose.Pose.Position.Y;
-Xerr2 = RABBIT_POSITION.Point.X - USV2_ODOM.Pose.Pose.Position.X;
-Yerr2 = RABBIT_POSITION.Point.Y - USV2_ODOM.Pose.Pose.Position.Y;
-Xerr3 = RABBIT_POSITION.Point.X - USV3_ODOM.Pose.Pose.Position.X;
-Yerr3 = RABBIT_POSITION.Point.Y - USV3_ODOM.Pose.Pose.Position.Y;
+Xerr1 = RABBIT_POSITION.Point.X - USV4_ODOM.Pose.Pose.Position.X;
+Yerr1 = RABBIT_POSITION.Point.Y - USV4_ODOM.Pose.Pose.Position.Y;
+Xerr2 = RABBIT_POSITION.Point.X - USV5_ODOM.Pose.Pose.Position.X;
+Yerr2 = RABBIT_POSITION.Point.Y - USV5_ODOM.Pose.Pose.Position.Y;
+Xerr3 = RABBIT_POSITION.Point.X - USV6_ODOM.Pose.Pose.Position.X;
+Yerr3 = RABBIT_POSITION.Point.Y - USV6_ODOM.Pose.Pose.Position.Y;
 
 % Distance errors with each other 
-XUerr1 = USV2_ODOM.Pose.Pose.Position.X - USV1_ODOM.Pose.Pose.Position.X;
-YUerr1 = USV2_ODOM.Pose.Pose.Position.Y - USV1_ODOM.Pose.Pose.Position.Y; 
-XUerr2 = USV2_ODOM.Pose.Pose.Position.X - USV3_ODOM.Pose.Pose.Position.X;
-YUerr2 = USV2_ODOM.Pose.Pose.Position.Y - USV3_ODOM.Pose.Pose.Position.Y; 
-XUerr3 = USV3_ODOM.Pose.Pose.Position.X - USV1_ODOM.Pose.Pose.Position.X;
-YUerr3 = USV3_ODOM.Pose.Pose.Position.Y - USV1_ODOM.Pose.Pose.Position.Y; 
+XUerr1 = USV5_ODOM.Pose.Pose.Position.X - USV4_ODOM.Pose.Pose.Position.X;
+YUerr1 = USV5_ODOM.Pose.Pose.Position.Y - USV4_ODOM.Pose.Pose.Position.Y; 
+XUerr2 = USV5_ODOM.Pose.Pose.Position.X - USV6_ODOM.Pose.Pose.Position.X;
+YUerr2 = USV5_ODOM.Pose.Pose.Position.Y - USV6_ODOM.Pose.Pose.Position.Y; 
+XUerr3 = USV6_ODOM.Pose.Pose.Position.X - USV4_ODOM.Pose.Pose.Position.X;
+YUerr3 = USV6_ODOM.Pose.Pose.Position.Y - USV4_ODOM.Pose.Pose.Position.Y; 
 
 % Convert to quaternions
-quat1 = USV1_ODOM.Pose.Pose.Orientation; 
+quat1 = USV4_ODOM.Pose.Pose.Orientation; 
 angles1 = quat2eul([quat1.W quat1.X quat1.Y quat1.Z]); 
 psi1 = angles1(1);
-quat2 = USV2_ODOM.Pose.Pose.Orientation; 
+quat2 = USV5_ODOM.Pose.Pose.Orientation; 
 angles2 = quat2eul([quat2.W quat2.X quat2.Y quat2.Z]); 
 psi2 = angles2(1);
-quat3 = USV3_ODOM.Pose.Pose.Orientation; 
+quat3 = USV6_ODOM.Pose.Pose.Orientation; 
 angles3 = quat2eul([quat3.W quat3.X quat3.Y quat3.Z]); 
 psi3 = angles3(1);
 
@@ -89,18 +89,18 @@ r2_c = kh * headErr2 - psiJ1 - psiJ2;
 v3_c = kv * distErr3;
 r3_c = kh * headErr3 + psiJ2 - psiJ3;
 
-% if D1<D
-%     v1_c = 10;
-%     fprintf("Distance From Target=%.2f", D1);
-% end
-% if D2<D
-%     v2_c = 10;
-%     fprintf("Distance From Target=%.2f", D2);
-% end 
-% if D3<D
-%     v3_c = 10; 
-%     fprintf("Distance From Target=%.2f", D3);
-% end 
+if D1<D
+    v1_c = 10;
+    fprintf("Distance From Target=%.2f", D1);
+end
+if D2<D
+    v2_c = 10;
+    fprintf("Distance From Target=%.2f", D2);
+end 
+if D3<D
+    v3_c = 10; 
+    fprintf("Distance From Target=%.2f", D3);
+end 
 
 % Saturation
 v1_c = min(abs(v1_c),7.5);
@@ -113,18 +113,18 @@ r2_c = max(r2_c, -2*pi);
 r3_c = min(r3_c, 2*pi);
 r3_c = max(r3_c, -2*pi);
 
-fprintf("USV1--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
+fprintf("USV4--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
     psiLead1,psi1,kh*headErr1,r1_c,distErr1,v1_c);
-fprintf("USV2--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
+fprintf("USV5--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
     psiLead2,psi2,kh*headErr2,r2_c,distErr2,v2_c);
-fprintf("USV3--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
+fprintf("USV6--> PsiLead=%.2f, Psi=%.2f, Heading Err=%.2f, r_c=%.2f, Distance Err=%.2f, u_c=%.2f\n", ...
     psiLead3,psi3,kh*headErr3,r3_c,distErr3,v3_c);
 
-fprintf("USV1 to USV2 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f, D1=%.2f \n", ...
+fprintf("USV4 to USV5 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f, D1=%.2f \n", ...
     psiJ1+psiJ3,UheadErr1,UdistErr1,D1);
-fprintf("USV2 to USV3 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f, D2=%.2f \n", ...
+fprintf("USV5 to USV6 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f, D2=%.2f \n", ...
     psiJ1+psiJ2,UheadErr2,UdistErr2,D2);
-fprintf("USV3 to USV1 --> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f, D3=%.2f \n", ...
+fprintf("USV6 to USV4--> hIJ=%.2f, Heading Err=%.2f, Distance Err (hIJ-d0)=%.2f, D3=%.2f \n", ...
     psiJ2+psiJ3, UheadErr3,UdistErr3, D3);
 
 return

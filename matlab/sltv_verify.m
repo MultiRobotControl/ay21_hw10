@@ -1,7 +1,6 @@
 %% Load .bag file and create bag file object. 
 
-
-fname = '2021-06-02-16-09-50.bag'; 
+fname = '2021-06-02-01-09-15.bag'; 
 bag = rosbag(fname);
  
 % Display available topics and message types in bag file. 
@@ -23,18 +22,26 @@ odom2_ts = timeseries(odom2_msgs,'Pose.Pose.Position.X','Pose.Pose.Position.Y', 
     'Pose.Pose.Orientation.W','Pose.Pose.Orientation.X','Pose.Pose.Orientation.Y',...
     'Pose.Pose.Orientation.Z','Twist.Twist.Linear.X','Twist.Twist.Angular.Z');
 
+odom3_msgs = select(bag,'Topic','/cora3/cora/sensors/p3d');
+ 
+% Create a timeseries object of the subset of message fields we are interested in
+odom3_ts = timeseries(odom3_msgs,'Pose.Pose.Position.X','Pose.Pose.Position.Y', ...
+    'Pose.Pose.Orientation.W','Pose.Pose.Orientation.X','Pose.Pose.Orientation.Y',...
+    'Pose.Pose.Orientation.Z','Twist.Twist.Linear.X','Twist.Twist.Angular.Z');
+
 % Create a time series of the Cmd data
 % Retrieve the messages as a cell array
 cmd1_msgs = select(bag,'Topic','/cora1/cora/cmd_vel');
- 
-cmd1_ts = timeseries(cmd1_msgs,'Linear.X','Linear.Y','Linear.Z',...
+ cmd1_ts = timeseries(cmd1_msgs,'Linear.X','Linear.Y','Linear.Z',...
         'Angular.X','Angular.Y','Angular.Z');
-    
+  
 cmd2_msgs = select(bag,'Topic','/cora2/cora/cmd_vel');
- 
 cmd2_ts = timeseries(cmd2_msgs,'Linear.X','Linear.Y','Linear.Z',...
         'Angular.X','Angular.Y','Angular.Z');
 
+cmd3_msgs = select(bag,'Topic','/cora3/cora/cmd_vel');
+cmd3_ts = timeseries(cmd3_msgs,'Linear.X','Linear.Y','Linear.Z',...
+        'Angular.X','Angular.Y','Angular.Z');
 % Create a time series of the Odometry data
 % Retrieve the messages as a cell array
 rabbit_msgs = select(bag,'Topic','/rabbit');
@@ -46,9 +53,8 @@ str1 = 'Start';
 str2 = 'End';
 
 % Plot the Data index corresponding to 'Pose.Pose.Position.X' & 'Pose.Pose.Position.Y'
-plot(rabbit_ts.Data(:,1),rabbit_ts.Data(:,2),'k--'); hold on
-plot(odom1_ts.Data(:,1),odom1_ts.Data(:,2),'r'); 
-plot(odom2_ts.Data(:,1),odom2_ts.Data(:,2),'g'); 
+%plot(odom_ts.Data(:,1),odom_ts.Data(:,2),'LineWidth', 2); 
+plot(rabbit_ts.Data(:,1),rabbit_ts.Data(:,2),'r','LineWidth', 1); hold on
 text(-250,-350-30,str1);
 text(-765,875+30,str2);
 plot(-250,-350,'ro');
@@ -60,22 +66,25 @@ ylabel('Y')
 grid on
 
 %% 2) Plot Distance of each USV with Virtual Leader
-X0 = rabbit_ts.Data(1:3704,1);
-Y0 = rabbit_ts.Data(1:3704,2);
+X0 = rabbit_ts.Data(:,1);
+Y0 = rabbit_ts.Data(:,2);
 X1 = odom1_ts.Data(2:end,1);
-Y1 = odom1_ts.Data(:3704,2);
+Y1 = odom1_ts.Data(2:end,2);
 X2 = odom2_ts.Data(2:end,1);
 Y2 = odom2_ts.Data(2:end,2);
+X3 = odom3_ts.Data(:,1);
+Y3 = odom3_ts.Data(:,2);
 
 dist1 = sqrt((X1-X0).^2 + (Y1-Y0).^2);  
 dist2 = sqrt((X2-X0).^2 + (Y2-Y0).^2); 
-
-figure; clf();
+dist3 = sqrt((X3-X0).^2 + (Y3-Y0).^2); 
+figure(1); clf();
 % Plot the Data index corresponding to 'Pose.Pose.Position.X' & 'Pose.Pose.Position.Y'
 plot(odom1_ts.Time(2:end),dist1,'b','LineWidth', 1); hold on
 plot(odom2_ts.Time(2:end),dist2,'r','LineWidth', 2); 
-title('Distance Between Each USV and Virtual Leader')
-legend('USV1 Position','USV2 Position','Location','best')
+plot(odom3_ts.Time(:),dist3,'k','LineWidth', 1); 
+title('(1) Distance Between Each USV and Virtual Leader')
+legend('USV1 Position','USV2 Position','USV3 Position','Location','best')
 xlabel('Time')
 ylabel('Distance')
 grid on
@@ -83,12 +92,16 @@ grid on
 %% 3) Plots of Distance between USVs
 
 Udist1 = sqrt((X2-X1).^2 + (Y2-Y1).^2);
+Udist2 = sqrt((X2-X3).^2 + (Y2-Y3).^2);
+Udist3 = sqrt((X3-X1).^2 + (Y3-Y1).^2);
 
-figure; clf();
+figure(2); clf();
 % Plot the Data index corresponding to 'Pose.Pose.Position.X' & 'Pose.Pose.Position.Y'
 plot(odom1_ts.Time(2:end), Udist1,'b','LineWidth',1); hold on
-title('Inter-Vehicle Distance')
-%legend('USV1-2','USV2-3')
+plot(odom2_ts.Time(2:end), Udist2,'r','LineWidth',2);
+plot(odom3_ts.Time(:), Udist3,'k','LineWidth',1);
+title('Inter-Vehicle Distance Between USV1, USV2 and USV3')
+legend('USV1-2','USV2-3','USV1-3')
 xlabel('Time')
 ylabel('Distance')
 hold off

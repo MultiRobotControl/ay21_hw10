@@ -1,7 +1,6 @@
 %% Load .bag file and create bag file object. 
 
-
-fname = '2021-06-02-16-09-50.bag'; 
+fname = '2021-06-07-20-41-36.bag'; 
 bag = rosbag(fname);
  
 % Display available topics and message types in bag file. 
@@ -60,12 +59,12 @@ ylabel('Y')
 grid on
 
 %% 2) Plot Distance of each USV with Virtual Leader
-X0 = rabbit_ts.Data(1:3704,1);
-Y0 = rabbit_ts.Data(1:3704,2);
+X0 = rabbit_ts.Data(1:end,1);
+Y0 = rabbit_ts.Data(1:end,2);
 X1 = odom1_ts.Data(2:end,1);
 Y1 = odom1_ts.Data(2:end,2);
-X2 = odom2_ts.Data(1:3704,1);
-Y2 = odom2_ts.Data(1:3704,2);
+X2 = odom2_ts.Data(2:end,1);
+Y2 = odom2_ts.Data(2:end,2);
 
 dist1 = sqrt((X1-X0).^2 + (Y1-Y0).^2);  
 dist2 = sqrt((X2-X0).^2 + (Y2-Y0).^2); 
@@ -73,7 +72,7 @@ dist2 = sqrt((X2-X0).^2 + (Y2-Y0).^2);
 figure; clf();
 % Plot the Data index corresponding to 'Pose.Pose.Position.X' & 'Pose.Pose.Position.Y'
 plot(odom1_ts.Time(2:end),dist1,'r'); hold on
-plot(odom2_ts.Time(1:3704),dist2,'g'); 
+plot(odom2_ts.Time(2:end),dist2,'g'); 
 title('Distance Between Each USV and Virtual Leader')
 legend('USV1','USV2','Location','best')
 xlabel('Time')
