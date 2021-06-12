@@ -8,7 +8,7 @@ clc
 
 %Load the file
 
-fname = '2021-06-11-09-17-34.bag';       % Filename
+fname = '2V_1L_cooperative_varing_spacing.bag';       % Filename
 
 %Create a bag file object with the file name
 bag = rosbag(fname)
@@ -23,6 +23,7 @@ cmd_cora1_msgs = select(bag,'Topic','cora1/cora/cmd_msg');
 odom_cora2_msgs = select(bag,'Topic','cora2/cora/sensors/p3d');
 cmd_cora2_msgs = select(bag,'Topic','cora2/cora/cmd_msg');
 
+
 %Create a timeseries object of the subset of message fields we are interested in
 odom_cora1_ts = timeseries(odom_cora1_msgs,'Pose.Pose.Position.X','Pose.Pose.Position.Y', ...
     'Pose.Pose.Orientation.W','Pose.Pose.Orientation.X','Pose.Pose.Orientation.Y','Pose.Pose.Orientation.Z', ...
@@ -31,9 +32,8 @@ cmd_cora1_ts = timeseries(cmd_cora1_msgs,'Linear.X','Linear.Y','Linear.Z','Angul
 odom_cora2_ts = timeseries(odom_cora2_msgs,'Pose.Pose.Position.X','Pose.Pose.Position.Y', ...
     'Pose.Pose.Orientation.W','Pose.Pose.Orientation.X','Pose.Pose.Orientation.Y','Pose.Pose.Orientation.Z', ...
     'Twist.Twist.Linear.X','Twist.Twist.Linear.Y','Twist.Twist.Angular.Z');
-cmd_cora1_ts = timeseries(cmd_cora2_msgs,'Linear.X','Linear.Y','Linear.Z','Angular.X','Angular.Y','Angular.Z');
+cmd_cora2_ts = timeseries(cmd_cora2_msgs,'Linear.X','Linear.Y','Linear.Z','Angular.X','Angular.Y','Angular.Z');
 rabbit_ts = timeseries(rabbit_msgs,'Point.X','Point.Y');
-
 
 
 %Plot X / Y Positions of the Rabbit
