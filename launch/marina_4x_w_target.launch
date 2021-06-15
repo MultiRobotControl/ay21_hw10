@@ -39,7 +39,7 @@
          
     <!-- Spawn USV model in Gazebo -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-x -222 -y -336 -z 0.1
+        args="-x -210 -y -325 -z 0.1
               -R 0 -P 0 -Y 0
               -urdf -param robot_description -model cora1"/>
               
@@ -83,7 +83,7 @@
          
     <!-- Spawn USV model in Gazebo -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-x -215 -y -362 -z 0.1
+        args="-x -205 -y -341 -z 0.1
               -R 0 -P 0 -Y 0
               -urdf -param robot_description -model cora2"/>
               
@@ -127,7 +127,7 @@
          
     <!-- Spawn USV model in Gazebo -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-x -252 -y -376 -z 0.1
+        args="-x -240 -y -334 -z 0.1
               -R 0 -P 0 -Y 0
               -urdf -param robot_description -model cora3"/>
               
@@ -171,7 +171,7 @@
          
     <!-- Spawn USV model in Gazebo -->
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-x -268 -y -349 -z 0.1
+        args="-x -238 -y -351 -z 0.1
               -R 0 -P 0 -Y 0
               -urdf -param robot_description -model cora4"/>
               
@@ -224,7 +224,7 @@
   
   <node pkg="mrc_examples" type="rabbit.py" name="rabbit">
     <param name="update_rate" type="double" value="10"/>
-    <param name="velocity" type="double" value="5"/>
+    <param name="velocity" type="double" value="7.5"/>
     <rosparam file="$(find mrc_examples)/config/rabbit_waypoints_marina.yaml" />
   </node>  
   

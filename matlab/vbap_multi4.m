@@ -5,10 +5,10 @@ function [u_c1,u_c2,u_c3,u_c4,r_c1,r_c2,r_c3,r_c4] = vbap_multi4(USV_ODOM,USV2_O
     dx2 = RABBIT_POSITION.Point.X - USV2_ODOM.Pose.Pose.Position.X;
     dy2 = RABBIT_POSITION.Point.Y - USV2_ODOM.Pose.Pose.Position.Y;
     
-    dx3 = USV2_ODOM.Pose.Pose.Position.X - USV3_ODOM.Pose.Pose.Position.X;
-    dy3 = USV2_ODOM.Pose.Pose.Position.Y - USV3_ODOM.Pose.Pose.Position.Y;
-    dx4 = USV_ODOM.Pose.Pose.Position.X - USV4_ODOM.Pose.Pose.Position.X;
-    dy4 = USV_ODOM.Pose.Pose.Position.Y - USV4_ODOM.Pose.Pose.Position.Y;
+    dx3 = USV_ODOM.Pose.Pose.Position.X - USV3_ODOM.Pose.Pose.Position.X;
+    dy3 = USV_ODOM.Pose.Pose.Position.Y - USV3_ODOM.Pose.Pose.Position.Y;
+    dx4 = USV2_ODOM.Pose.Pose.Position.X - USV4_ODOM.Pose.Pose.Position.X;
+    dy4 = USV2_ODOM.Pose.Pose.Position.Y - USV4_ODOM.Pose.Pose.Position.Y;
     
     dx_Lcora = USV2_ODOM.Pose.Pose.Position.X - USV_ODOM.Pose.Pose.Position.X;
     dy_Lcora = USV2_ODOM.Pose.Pose.Position.Y - USV_ODOM.Pose.Pose.Position.Y;
@@ -36,7 +36,8 @@ function [u_c1,u_c2,u_c3,u_c4,r_c1,r_c2,r_c3,r_c4] = vbap_multi4(USV_ODOM,USV2_O
     angles4 = quat2eul([quat4.W quat4.X quat4.Y quat4.Z]); 
     psi4 = angles4(1);
 
-k_v = 0.1; k_h = 2.0; k_o = 0.05;
+k_v_l = 0.12; % k_v_f = 0.7; 
+k_h = 2.0; k_o = 0.05;
 d_0 = 15; d_1 = 2 * d_0;
 
 dist1 = sqrt(dx1^2 + dy1^2);
@@ -103,24 +104,24 @@ if tdist1 < 50
     headerr2 = wrapToPi(psi2_t - psi2);
     headerr3 = wrapToPi(psi3_t - psi3);
     headerr4 = wrapToPi(psi4_t - psi4);
-    k_v = 0.2;
+    k_v_l = 0.2; k_v_f = 0.2;
 end
 
-% Stagger Start
-if RABBIT_POSITION.Header.Seq < 100
-    dist2 = 0;
-    dist3 = 0;
-    dist4 = 0;
-end
-if RABBIT_POSITION.Header.Seq < 145
-    dist3 = 0;
-end
+% % Stagger Start
+% if RABBIT_POSITION.Header.Seq < 100
+%     dist2 = 0;
+%     dist3 = 0;
+%     dist4 = 0;
+% end
+% if RABBIT_POSITION.Header.Seq < 145
+%     dist3 = 0;
+% end
 
 % Total Control Law
-u_c1 = k_v .* dist1;
-u_c2 = k_v .* dist2;
-u_c3 = k_v .* dist3;
-u_c4 = k_v .* dist4;
+u_c1 = k_v_l .* dist1;
+u_c2 = k_v_l .* dist2;
+u_c3 = k_v_l .* dist3;
+u_c4 = k_v_l .* dist4;
 r_c1 = k_h * headerr1;
 r_c2 = k_h * headerr2;
 r_c3 = k_h * headerr3;
